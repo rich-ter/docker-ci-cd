@@ -17,7 +17,7 @@ jobs:
           POSTGRES_USER: myuser
           POSTGRES_PASSWORD: mypassword
         ports:
-          - 5432:5432
+          - 5433:5432 # Use a different host port to avoid conflict
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
