@@ -38,6 +38,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    'mysite',
+    "blog", # <- Our new blog app.
+
     # Wagtail apps
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
@@ -54,8 +57,7 @@ INSTALLED_APPS = [
     'modelcluster',
     'taggit',
     # Your apps
-    'djangoapp',
-    'mysite',
+
 ]
 
 MIDDLEWARE = [

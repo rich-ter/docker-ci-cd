@@ -1,12 +1,11 @@
+# mysite/mysite/models.py
 from django.db import models
-
 from wagtail.models import Page
 from wagtail.admin.edit_handlers import FieldPanel
-from wagtail.core.fields import RichTextField
+from wagtail.fields import RichTextField
 
 class HomePage(Page):
     pass
-
 
 class ArticlePage(Page):
     body = RichTextField(blank=True)
