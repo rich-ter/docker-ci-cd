@@ -28,7 +28,8 @@ services:
         echo Waiting for database;
         sleep 2;
       done;
-      python manage.py migrate --noinput &&
+      python manage.py makemigrations home articles &&
+      python manage.py migrate &&
       python manage.py collectstatic --noinput --clear &&
       gunicorn --bind 0.0.0.0:8000 cms.wsgi:application
       "

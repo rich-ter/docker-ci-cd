@@ -3,8 +3,6 @@ from wagtail.models import Page
 from wagtail.fields import RichTextField
 from wagtail.admin.panels import FieldPanel
 from wagtail.search import index
-from wagtail.images.models import Image
-from wagtail.admin.panels import FieldPanel
 
 class ArticlePage(Page):
     date = models.DateField("Post date")
