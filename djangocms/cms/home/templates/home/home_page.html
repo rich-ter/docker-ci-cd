@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load static wagtailimages_tags %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/cms.css' %}">
+
+<div class="container">
+  <header class="header">
+    <h1>{{ page.title }}</h1>
+    <p>Welcome to our project combining Nginx, Django, PostgreSQL, and GitHub Actions for CI/CD.</p>
+  </header>
+
+  <section class="recent-articles">
+    <h2>Our Most Recent Articles</h2>
+    <div class="articles-list">
+      {% for article in articles %}
+      <div class="article-item">
+        <div class="article-content">
+          <span class="article-category">{{ article.category }}</span>
+          <h3><a href="{{ article.url }}">{{ article.title }}</a></h3>
+          <p>{{ article.intro }}</p>
+          <p class="article-author">{{ article.author }}</p>
+          <small class="article-date">{{ article.date }}</small>
+        </div>
+        {% if article.featured_image %}
+        <div class="article-image">
+          {% image article.featured_image fill-300x200 %}
+        </div>
+        {% endif %}
+      </div>
+      {% empty %}
+      <p>No articles found.</p>
+      {% endfor %}
+    </div>
+  </section>
+</div>
+
+{% endblock %}

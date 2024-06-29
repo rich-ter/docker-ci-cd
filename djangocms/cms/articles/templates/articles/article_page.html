@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load static wagtailimages_tags wagtailcore_tags %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/cms.css' %}">
+
+<div class="article-container">
+    {% if page.featured_image %}
+    <div class="article-featured-image">
+        {% image page.featured_image fill-800x400 %}
+    </div>
+    {% endif %}
+    <h1 class="article-title">{{ page.title }}</h1>
+    <p class="article-author">By {{ page.author }} - <span class="article-date">{{ page.date }}</span></p>
+    <p class="article-category">{{ page.category }}</p>
+    <div class="article-body">{{ page.body|richtext }}</div>
+</div>
+
+{% endblock %}

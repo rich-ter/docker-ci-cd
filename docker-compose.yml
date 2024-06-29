@@ -11,21 +11,39 @@ services:
       - "5432:5432"
     volumes:
       - db_data:/var/lib/postgresql/data
+    networks:
+      - djangonetwork
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U myuser -d mydatabase"]
+      interval: 10s
+      retries: 5
 
   web:
-    build: .
-    command: python manage.py runserver 0.0.0.0:8000
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: >
+      bash -c "
+      until pg_isready -h db -U myuser; do
+        echo Waiting for database;
+        sleep 2;
+      done;
+      python manage.py migrate --noinput &&
+      python manage.py collectstatic --noinput --clear &&
+      gunicorn --bind 0.0.0.0:8000 cms.wsgi:application
+      "
     volumes:
-      - .:/usr/src/app
-    ports:
-      - "8000:8000"
+      - ./djangocms:/usr/src/app
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+    networks:
+      - djangonetwork
     environment:
-      - DATABASE_NAME=mydatabase
-      - DATABASE_USER=myuser
-      - DATABASE_PASSWORD=mypassword
-      - DATABASE_HOST=db
+      DATABASE_NAME: mydatabase
+      DATABASE_USER: myuser
+      DATABASE_PASSWORD: mypassword
+      DATABASE_HOST: db
 
   nginx:
     build:
@@ -35,6 +53,12 @@ services:
       - "80:80"
     depends_on:
       - web
+    networks:
+      - djangonetwork
+
+networks:
+  djangonetwork:
+    driver: bridge
 
 volumes:
   db_data:
