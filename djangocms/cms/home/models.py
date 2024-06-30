@@ -13,7 +13,14 @@ class HomePage(Page):
         FieldPanel('body'),
     ]
 
+    parent_page_types = ['wagtailcore.Page']  # Ensure it's allowed as the site root
+    subpage_types = ['articles.ArticlePage']  # Allow AsrticlePage as a child
+
     def get_context(self, request):
         context = super().get_context(request)
-        context['articles'] = ArticlePage.objects.live().public().order_by('-date')
+        context['articles'] = (
+            self.get_children().type(ArticlePage).live().public().specific().order_by('-first_published_at')
+        )
         return context
+
+    template = "home/home_page.html"  # Specify the template

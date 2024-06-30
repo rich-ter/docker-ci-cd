@@ -22,6 +22,14 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    environment:
+      DJANGO_SUPERUSER_USERNAME: admin
+      DJANGO_SUPERUSER_PASSWORD: admin
+      DJANGO_SUPERUSER_EMAIL: admin@example.com
+      DATABASE_NAME: mydatabase
+      DATABASE_USER: myuser
+      DATABASE_PASSWORD: mypassword
+      DATABASE_HOST: db
     command: >
       bash -c "
       until pg_isready -h db -U myuser; do
@@ -30,6 +38,9 @@ services:
       done;
       python manage.py makemigrations home articles &&
       python manage.py migrate &&
+      python manage.py createsuperuser --noinput &&
+      python manage.py create_homepage &&
+      python manage.py loaddata articles &&
       python manage.py collectstatic --noinput --clear &&
       gunicorn --bind 0.0.0.0:8000 cms.wsgi:application
       "
@@ -40,11 +51,6 @@ services:
         condition: service_healthy
     networks:
       - djangonetwork
-    environment:
-      DATABASE_NAME: mydatabase
-      DATABASE_USER: myuser
-      DATABASE_PASSWORD: mypassword
-      DATABASE_HOST: db
 
   nginx:
     build:

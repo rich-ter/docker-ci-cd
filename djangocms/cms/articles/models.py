@@ -5,6 +5,7 @@ from wagtail.admin.panels import FieldPanel
 from wagtail.search import index
 
 class ArticlePage(Page):
+    custom_title = models.CharField(max_length=250, blank=True)
     date = models.DateField("Post date")
     intro = models.CharField(max_length=250, blank=True)
     body = RichTextField(blank=True)
@@ -17,6 +18,7 @@ class ArticlePage(Page):
     )
 
     content_panels = Page.content_panels + [
+        FieldPanel('custom_title'),
         FieldPanel('date'),
         FieldPanel('intro'),
         FieldPanel('body'),
